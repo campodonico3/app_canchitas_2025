@@ -16,7 +16,7 @@ class BasicAppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _loading(context);
+    return _initial(context);
   }
 
   Widget _loading(BuildContext context) {
@@ -34,20 +34,21 @@ class BasicAppButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xff3461FD).withOpacity(0.8),
-            offset: const Offset(0, 5),
-            blurRadius: 17,
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: const Color(0xff3461FD).withOpacity(0.8),
+        //     offset: const Offset(0, 5),
+        //     blurRadius: 17,
+        //   ),
+        // ],
       ),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
+          backgroundColor: Color(0xff3461FD),
           minimumSize: Size(
             width ?? MediaQuery.of(context).size.width,
-            height ?? MediaQuery.of(context).size.height,
+            height ?? 60,
           ),
         ),
         child: Text(
