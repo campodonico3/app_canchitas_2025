@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import '../../service_locator.dart';
 import '../models/signup_req_params.dart';
 
+// COMUNICACIÓN API
 abstract class AuthApiService {
   Future<Either> signup(SignUpReqParams signUpReqParams);
 }
@@ -18,7 +19,6 @@ class AuthApiServiceImpl implements AuthApiService {
       var response = await sl<DioClient>().post(
         ApiUrls.register,
         data: signUpReqParams.toMap(),
-
       );
       return Right(response);
     } on DioException catch (e) {
