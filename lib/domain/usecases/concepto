@@ -1,0 +1,201 @@
+3️⃣ USECASES (Casos de Uso)
+¿Qué son?
+Una acción específica que un usuario puede realizar. Encapsula la lógica de negocio de esa acción.
+Regla de Oro:
+1 UseCase = 1 Acción = 1 Responsabilidad
+Características:
+
+✅ Una sola responsabilidad
+✅ Orquesta la lógica de negocio
+✅ Usa el Repository (contrato)
+✅ Validaciones y reglas de negocio
+
+Ejemplo Básico:
+
+// domain/usecases/login.dart
+import 'package:dartz/dartz.dart';
+import '../entities/user.dart';
+import '../repositories/auth.dart';
+
+class LoginUseCase {
+  final AuthRepository repository;
+
+  LoginUseCase(this.repository);
+
+  Future<Either<String, User>> call(String email, String password) async {
+    // 1. Validaciones
+    if (email.isEmpty) {
+      return Left('El email es requerido');
+    }
+
+    if (!email.contains('@')) {
+      return Left('Email inválido');
+    }
+
+    if (password.isEmpty) {
+      return Left('La contraseña es requerida');
+    }
+
+    if (password.length < 6) {
+      return Left('La contraseña debe tener al menos 6 caracteres');
+    }
+
+    // 2. Ejecutar operación
+    return await repository.login(email, password);
+  }
+}
+
+Ejemplo con Lógica Compleja:
+
+// domain/usecases/signup.dart
+import 'package:dartz/dartz.dart';
+import '../entities/user.dart';
+import '../repositories/auth.dart';
+
+class SignUpUseCase {
+  final AuthRepository authRepository;
+
+  SignUpUseCase(this.authRepository);
+
+  Future<Either<String, User>> call({
+    required String email,
+    required String password,
+    required String confirmPassword,
+    required String name,
+    required DateTime birthDate,
+  }) async {
+    // 1. Validar email
+    if (email.isEmpty || !_isValidEmail(email)) {
+      return Left('Email inválido');
+    }
+
+    // 2. Validar contraseña
+    if (password.isEmpty || password.length < 8) {
+      return Left('La contraseña debe tener al menos 8 caracteres');
+    }
+
+    if (!_hasUpperCase(password) || !_hasNumber(password)) {
+      return Left('La contraseña debe tener mayúsculas y números');
+    }
+
+    // 3. Confirmar contraseña
+    if (password != confirmPassword) {
+      return Left('Las contraseñas no coinciden');
+    }
+
+    // 4. Validar nombre
+    if (name.isEmpty || name.length < 3) {
+      return Left('El nombre debe tener al menos 3 caracteres');
+    }
+
+    // 5. Validar edad
+    final age = DateTime.now().year - birthDate.year;
+    if (age < 13) {
+      return Left('Debes tener al menos 13 años');
+    }
+
+    // 6. Todo válido, proceder con registro
+    return await authRepository.signup(email, password, name);
+  }
+
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  bool _hasUpperCase(String text) => text.contains(RegExp(r'[A-Z]'));
+
+  bool _hasNumber(String text) => text.contains(RegExp(r'[0-9]'));
+}
+
+UseCase con Múltiples Repositorios:
+
+// domain/usecases/checkout.dart
+import 'package:dartz/dartz.dart';
+import '../entities/order.dart';
+import '../repositories/cart.dart';
+import '../repositories/payment.dart';
+import '../repositories/order.dart';
+
+class CheckoutUseCase {
+  final CartRepository cartRepository;
+  final PaymentRepository paymentRepository;
+  final OrderRepository orderRepository;
+
+  CheckoutUseCase({
+    required this.cartRepository,
+    required this.paymentRepository,
+    required this.orderRepository,
+  });
+
+  Future<Either<String, Order>> call({
+    required String paymentMethodId,
+    required String shippingAddress,
+  }) async {
+    // 1. Obtener items del carrito
+    final cartResult = await cartRepository.getCart();
+    if (cartResult.isLeft()) {
+      return Left('Error obteniendo el carrito');
+    }
+
+    final cart = cartResult.getOrElse(() => throw Exception());
+
+    // 2. Validar carrito no vacío
+    if (cart.items.isEmpty) {
+      return Left('El carrito está vacío');
+    }
+
+    // 3. Calcular total
+    final total = cart.calculateTotal();
+
+    // 4. Procesar pago
+    final paymentResult = await paymentRepository.processPayment(
+      amount: total,
+      paymentMethodId: paymentMethodId,
+    );
+
+    if (paymentResult.isLeft()) {
+      return Left('Error procesando el pago');
+    }
+
+    // 5. Crear orden
+    final orderResult = await orderRepository.createOrder(
+      items: cart.items,
+      total: total,
+      shippingAddress: shippingAddress,
+    );
+
+    if (orderResult.isLeft()) {
+      // Revertir pago si falla la orden
+      await paymentRepository.refund(paymentMethodId);
+      return Left('Error creando la orden');
+    }
+
+    // 6. Vaciar carrito
+    await cartRepository.clearCart();
+
+    return orderResult;
+  }
+}
+
+UseCase con Base de UseCase abstracto:
+
+// core/usecase/usecase.dart
+abstract class UseCase<Type, Params> {
+  Future<Type> call({Params params});
+}
+
+// domain/usecases/get_user_profile.dart
+class GetUserProfileUseCase implements UseCase<Either<String, User>, String> {
+  final UserRepository repository;
+
+  GetUserProfileUseCase(this.repository);
+
+  @override
+  Future<Either<String, User>> call({String? params}) async {
+    if (params == null || params.isEmpty) {
+      return Left('ID de usuario requerido');
+    }
+
+    return await repository.getUserById(params);
+  }
+}

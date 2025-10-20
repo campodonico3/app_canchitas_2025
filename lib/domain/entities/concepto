@@ -1,0 +1,63 @@
+1️⃣ ENTITIES (Entidades)¿Qué son?
+Modelos que representan objetos de negocio puros, sin dependencias externas.Características:
+
+✅ Solo propiedades y lógica de negocio
+✅ No saben de JSON, APIs, bases de datos
+✅ Pueden ser usadas en cualquier plataforma (móvil, web, CLI)
+
+Ejemplo Básico:
+
+// domain/entities/user.dart
+class User {
+  final String id;
+  final String name;
+  final String email;
+  final DateTime birthDate;
+  final bool isPremium;
+
+  User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.birthDate,
+    required this.isPremium,
+  });
+
+  // ✅ Lógica de negocio
+  int get age {
+    final now = DateTime.now();
+    int age = now.year - birthDate.year;
+    if (now.month < birthDate.month ||
+        (now.month == birthDate.month && now.day < birthDate.day)) {
+      age--;
+    }
+    return age;
+  }
+
+  bool get isAdult => age >= 18;
+
+  bool get canAccessPremiumFeature => isPremium && isAdult;
+
+  String get displayName => name.isEmpty ? email.split('@').first : name;
+}
+
+❌ Lo que NO debe tener una Entity:
+
+// ❌ MAL - Dependencias externas
+class User {
+  final DocumentSnapshot snapshot;  // ❌ Firebase
+
+  factory User.fromJson(Map<String, dynamic> json) {...}  // ❌ JSON
+
+  Future<void> save() async {
+    await http.post(...);  // ❌ HTTP
+  }
+}
+
+// ✅ BIEN - Solo negocio
+class User {
+  final String id;
+  final String name;
+
+  bool get isValid => name.isNotEmpty;  // ✅ Lógica pura
+}

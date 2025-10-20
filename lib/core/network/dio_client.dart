@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'interceptors.dart';
 import 'package:dio/dio.dart';
 
@@ -45,6 +47,11 @@ class DioClient {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
+
+    debugPrint('🌐 [DIO CLIENT] POST request iniciado');
+    debugPrint('🔗 [DIO CLIENT] URL: $url');
+    debugPrint('📦 [DIO CLIENT] Data: $data\n');
+
     try {
       final Response response = await _dio.post(
         url,
@@ -53,6 +60,10 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
+
+      debugPrint('⬅️  [DIO CLIENT] Respuesta recibida');
+      debugPrint('📊 [DIO CLIENT] Status: ${response.statusCode}\n');
+
       return response;
     } catch (e) {
       rethrow;

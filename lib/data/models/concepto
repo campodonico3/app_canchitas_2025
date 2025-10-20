@@ -1,0 +1,97 @@
+1️⃣ MODELS (DTOs - Data Transfer Objects)
+¿Qué son?
+Objetos que transfieren datos entre capas. Son la representación técnica de cómo vienen/van los datos desde APIs o bases de datos.
+Características:
+ - ✅ Conocen el formato de la API (JSON, XML)
+ - ✅ Métodos toJson() y fromJson()
+ - ✅ Pueden tener nombres técnicos (snake_case de APIs)
+ - ✅ Se convierten a/desde Entities
+
+Ejemplo Básico:
+
+// data/models/user_model.dart
+class UserModel {
+  final String userId;        // Como viene de la API
+  final String emailAddress;
+  final String fullName;
+  final int createdTimestamp;
+
+  UserModel({
+    required this.userId,
+    required this.emailAddress,
+    required this.fullName,
+    required this.createdTimestamp,
+  });
+
+  // ✅ Desde JSON (API → App)
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      userId: json['user_id'] ?? '',
+      emailAddress: json['email_address'] ?? '',
+      fullName: json['full_name'] ?? '',
+      createdTimestamp: json['created_at'] ?? 0,
+    );
+  }
+
+  // ✅ Hacia JSON (App → API)
+  Map<String, dynamic> toJson() {
+    return {
+      'user_id': userId,
+      'email_address': emailAddress,
+      'full_name': fullName,
+      'created_at': createdTimestamp,
+    };
+  }
+
+  // ✅ Convertir a Entity (Domain)
+  User toEntity() {
+    return User(
+      id: userId,
+      email: emailAddress,
+      name: fullName,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(createdTimestamp * 1000),
+    );
+  }
+
+  // ✅ Crear desde Entity
+  factory UserModel.fromEntity(User user) {
+    return UserModel(
+      userId: user.id,
+      emailAddress: user.email,
+      fullName: user.name,
+      createdTimestamp: user.createdAt.millisecondsSinceEpoch ~/ 1000,
+    );
+  }
+}
+
+DTO vs Entity - La Diferencia:
+
+// ❌ API Response (como viene del servidor)
+{
+  "user_id": "123",
+  "email_address": "user@example.com",
+  "full_name": "Juan Pérez",
+  "created_at": 1640000000,
+  "is_premium_user": true
+}
+
+// 💾 DATA - UserModel (DTO)
+class UserModel {
+  final String userId;           // Snake case
+  final String emailAddress;
+  final String fullName;
+  final int createdTimestamp;    // Timestamp numérico
+  final bool isPremiumUser;
+}
+
+// 🧠 DOMAIN - User (Entity)
+class User {
+  final String id;               // Camel case
+  final String email;
+  final String name;
+  final DateTime createdAt;      // DateTime tipado
+  final bool isPremium;
+
+  // + Lógica de negocio
+  bool get canAccessFeature => isPremium && /* lógica */;
+}

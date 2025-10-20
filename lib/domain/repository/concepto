@@ -1,0 +1,52 @@
+2️⃣ REPOSITORIES (Contratos)
+¿Qué son?
+Interfaces abstractas que definen QUÉ operaciones puedes hacer, sin decir CÓMO se hacen.
+Características:
+
+✅ Solo métodos abstractos (sin implementación)
+✅ Define el contrato entre Domain y Data
+✅ Retorna Entities o tipos primitivos
+✅ Usa Either de Dartz para manejo de errores
+
+Ejemplo Básico:
+
+// domain/repositories/auth.dart
+import 'package:dartz/dartz.dart';
+import '../entities/user.dart';
+
+abstract class AuthRepository {
+  // Left = Error, Right = Success
+  Future<Either<String, User>> login(String email, String password);
+
+  Future<Either<String, User>> signup(String email, String password, String name);
+
+  Future<Either<String, void>> logout();
+
+  Future<Either<String, User>> getCurrentUser();
+
+  Future<Either<String, void>> resetPassword(String email);
+}
+
+¿Por qué Either?
+
+// ❌ Sin Either - Excepción no controlada
+Future<User> login(String email, String password) async {
+  // Si falla, lanza excepción
+  throw Exception('Error');
+}
+
+// ✅ Con Either - Error explícito
+Future<Either<String, User>> login(String email, String password) async {
+  // Retorna Left(error) o Right(user)
+  // El que llama DEBE manejar ambos casos
+}
+
+Uso del Repository:
+
+// La implementación viene de DATA
+class AuthRepositoryImpl implements AuthRepository {
+  @override
+  Future<Either<String, User>> login(String email, String password) async {
+    // Implementación real aquí
+  }
+}

@@ -1,0 +1,15 @@
+💾 DATA - La Capa de Implementación
+¿Qué es el Data?
+El Data es la capa que implementa CÓMO se obtienen, guardan y manipulan los datos. Contiene toda la lógica técnica de comunicación con servicios externos.
+Metáfora: Si tu app fuera un restaurante:
+ - Presentation = Meseros (toman pedidos y sirven)
+ - Domain = Recetas y menú (qué se puede cocinar)
+ - Data = Cocina y proveedores (cómo se prepara, de dónde vienen ingredientes)
+
+ 📂 Estructura del Data
+     data/
+     ├── models/           → DTOs (Data Transfer Objects)
+     ├── repositories/     → Implementación de contratos del Domain
+     └── sources/          → Fuentes de datos (API, DB local, caché)
+         ├── remote/       → APIs, servicios web
+         └── local/        → SQLite, SharedPreferences, Hive

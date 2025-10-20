@@ -1,0 +1,80 @@
+🧠 DOMAIN - El Corazón de Clean Architecture
+¿Qué es el Domain?
+El Domain es la capa central que contiene la lógica de negocio pura de tu aplicación. Es independiente de:
+ - ❌ Flutter/UI
+ - ❌ APIs/HTTP
+ - ❌ Bases de datos
+ - ❌ Librerías externas
+
+Metáfora: Si tu app fuera una empresa:
+ - Presentation = Oficinas/Recepción (donde interactúan los clientes)
+ - Domain = CEO y estrategia empresarial (las reglas del negocio)
+ - Data = Almacenes y proveedores (de donde vienen/van los datos)
+
+ 📂 Estructura del Domain
+     domain/
+     ├── entities/          → Modelos de negocio
+     ├── repositories/      → Contratos (interfaces)
+     └── usecases/         → Casos de uso (acciones del usuario)
+
+🔄 Flujo Completo en Domain
+
+// 1. UI llama al UseCase
+final result = await loginUseCase.call('user@email.com', '123456');
+
+// 2. UseCase valida y llama al Repository (contrato)
+class LoginUseCase {
+  Future<Either<String, User>> call(String email, String password) async {
+    // Validaciones
+    if (!isValidEmail(email)) return Left('Email inválido');
+
+    // Llamar repository
+    return await authRepository.login(email, password);
+  }
+}
+
+// 3. Repository (contrato) define QUÉ hacer
+abstract class AuthRepository {
+  Future<Either<String, User>> login(String email, String password);
+}
+
+// 4. DATA implementa el CÓMO (esto ya es DATA, no DOMAIN)
+class AuthRepositoryImpl implements AuthRepository {
+  @override
+  Future<Either<String, User>> login(String email, String password) async {
+    final response = await apiService.login(email, password);
+    return Right(User.fromDTO(response));
+  }
+}
+
+✅ Checklist del Domain Perfecto
+Entities:
+
+✅ Sin imports de Flutter, Dio, Firebase
+✅ Solo lógica de negocio pura
+✅ Propiedades inmutables (final)
+✅ Getters para cálculos
+✅ Métodos para comportamiento
+
+Repositories:
+
+✅ Abstractos (abstract class)
+✅ Solo firmas de métodos
+✅ Retornan Either<Error, Success>
+✅ Nombres descriptivos
+
+UseCases:
+
+✅ Una responsabilidad
+✅ Validaciones de negocio
+✅ Usan repositories (contratos)
+✅ Método call() para ejecutar
+✅ Retornan Either
+
+
+🎯 Reglas de Oro del Domain
+1.- Independencia total: No importes nada externo (Flutter, HTTP, DB)
+2.- Lógica pura: Solo reglas de negocio
+3.- Testeable: Sin dependencias, fácil de testear
+4.- Estable: Cambia poco, es el núcleo
+5.- Reutilizable: Sirve para móvil, web, CLI

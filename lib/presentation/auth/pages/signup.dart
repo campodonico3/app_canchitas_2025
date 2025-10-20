@@ -77,13 +77,38 @@ class SignUpPage extends StatelessWidget {
   Widget _createAccountButton(BuildContext context) {
     return BasicAppButton(
       title: 'Create Account',
-      onPressed: () {
-        sl<SignUpUseCase>().call(
-          params: SignUpReqParams(
-            email: _emailController.text,
-            password: _passwordController.text,
-            username: _usernameController.text,
-          ),
+      onPressed: () async {
+        debugPrint('═══════════════════════════════════════════════');
+        debugPrint('🚀 [UI] Botón presionado - Iniciando registro');
+        debugPrint('📧 Email: ${_emailController.text}');
+        debugPrint('👤 Username: ${_usernameController.text}');
+        debugPrint('═══════════════════════════════════════════════\n');
+
+        final params = SignUpReqParams(
+          email: _emailController.text,
+          password: _passwordController.text,
+          username: _usernameController.text,
+        );
+
+        debugPrint('📦 [UI] Params creados: ${params.toMap()}');
+        debugPrint('➡️  [UI] Llamando al UseCase...\n');
+
+        final result = await sl<SignUpUseCase>().call(params: params);
+
+        result.fold(
+          (error) {
+            debugPrint('❌ [UI] Error recibido: $error');
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Error: $error')));
+          },
+          (data) {
+            debugPrint('✅ [UI] Registro exitoso!');
+            debugPrint('📄 [UI] Data: $data\n');
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('¡Registro exitoso!')));
+          },
         );
       },
     );
