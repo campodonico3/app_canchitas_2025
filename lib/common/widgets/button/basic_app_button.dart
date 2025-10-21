@@ -1,4 +1,7 @@
+import 'package:app_canchitas_2025/common/bloc/button/button_state.dart';
+import 'package:app_canchitas_2025/common/bloc/button/button_state_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BasicAppButton extends StatelessWidget {
   final String title;
@@ -16,7 +19,15 @@ class BasicAppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _initial(context);
+    return BlocBuilder<ButtonStateCubit, ButtonState>(
+      builder: (context, state) {
+        if (state is ButtonLoadingState) {
+          return _loading(context);
+        } else {
+          return _initial(context);
+        }
+      },
+    );
   }
 
   Widget _loading(BuildContext context) {
