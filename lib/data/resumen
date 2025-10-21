@@ -13,3 +13,38 @@ Metáfora: Si tu app fuera un restaurante:
      └── sources/          → Fuentes de datos (API, DB local, caché)
          ├── remote/       → APIs, servicios web
          └── local/        → SQLite, SharedPreferences, Hive
+
+✅ Checklist de la Capa DATA (Continuación)
+
+    Models (DTOs):
+    - ✅ fromJson() para parsear API
+    - ✅ toJson() para enviar a API
+    - ✅ toEntity() para convertir a Domain
+    - ✅ fromEntity() para crear desde Domain
+    - ✅ Manejo de null safety
+    - ✅ Valores por defecto para campos opcionales
+    - ✅ Validación de tipos en parseo
+
+    Sources (Remote):
+    - ✅ Manejo de DioException
+    - ✅ Extracción de mensajes de error
+    - ✅ Logs descriptivos
+    - ✅ Retornar Either<Error, Success>
+    - ✅ Timeouts configurados
+    - ✅ Retry logic (opcional)
+
+    Sources (Local):
+    - ✅ Operaciones CRUD completas
+    - ✅ Manejo de caché con timestamps
+    - ✅ Limpieza de caché antigua
+    - ✅ Serialización/Deserialización
+    - ✅ Manejo de errores de I/O
+
+    Repositories:
+    - ✅ Implementan contratos del Domain
+    - ✅ Coordinan múltiples sources
+    - ✅ Estrategia de caché definida
+    - ✅ Conversión DTO ↔ Entity
+    - ✅ Manejo robusto de errores
+    - ✅ Logs detallados del flujo
+    - ✅ Sincronización offline (si aplica)

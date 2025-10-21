@@ -48,28 +48,25 @@ class AuthRepositoryImpl implements AuthRepository {
 }
 
 ✅ Checklist del Domain Perfecto
-Entities:
+    Entities:
+    - ✅ Sin imports de Flutter, Dio, Firebase
+    - ✅ Solo lógica de negocio pura
+    - ✅ Propiedades inmutables (final)
+    - ✅ Getters para cálculos
+    - ✅ Métodos para comportamiento
 
-✅ Sin imports de Flutter, Dio, Firebase
-✅ Solo lógica de negocio pura
-✅ Propiedades inmutables (final)
-✅ Getters para cálculos
-✅ Métodos para comportamiento
+    Repositories:
+    - ✅ Abstractos (abstract class)
+    - ✅ Solo firmas de métodos
+    - ✅ Retornan Either<Error, Success>
+    - ✅ Nombres descriptivos
 
-Repositories:
-
-✅ Abstractos (abstract class)
-✅ Solo firmas de métodos
-✅ Retornan Either<Error, Success>
-✅ Nombres descriptivos
-
-UseCases:
-
-✅ Una responsabilidad
-✅ Validaciones de negocio
-✅ Usan repositories (contratos)
-✅ Método call() para ejecutar
-✅ Retornan Either
+    UseCases:
+    - ✅ Una responsabilidad
+    - ✅ Validaciones de negocio
+    - ✅ Usan repositories (contratos)
+    - ✅ Método call() para ejecutar
+    - ✅ Retornan Either
 
 
 🎯 Reglas de Oro del Domain

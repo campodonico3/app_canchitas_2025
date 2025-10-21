@@ -44,7 +44,7 @@ class SignUpPage extends StatelessWidget {
 
   Widget _signUp() {
     return Text(
-      'Sign uP',
+      'Sign Up',
       style: TextStyle(
         color: Color(0xff2A4ECA),
         fontWeight: FontWeight.bold,
