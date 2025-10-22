@@ -11,16 +11,8 @@ import '../../service_locator.dart';
 class SignUpUseCase implements UseCase<Either, SignUpReqParams> {
   @override
   Future<Either> call({SignUpReqParams? params}) async {
-
-    debugPrint('🎯 [USE CASE] SignUpUseCase llamado');
-    debugPrint('📦 [USE CASE] Params recibidos: ${params?.toMap()}');
-    debugPrint('➡️  [USE CASE] Delegando al Repository...\n');
-
     // Delegar al repository
     final result = await sl<AuthRepository>().signup(params!);
-
-    debugPrint('⬅️  [USE CASE] Respuesta recibida del Repository');
-
     return result;
   }
 }

@@ -4,4 +4,5 @@ import 'package:dartz/dartz.dart';
 // 📋 CONTRATO -> Define QUÉ se puede hacer, no CÓMO
 abstract class AuthRepository {
   Future<Either> signup(SignUpReqParams signUpReqParams);
+  Future<bool> isLoggedIn(); // Know if the user is authenticated
 }
