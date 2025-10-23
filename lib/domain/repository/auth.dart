@@ -5,4 +5,5 @@ import 'package:dartz/dartz.dart';
 abstract class AuthRepository {
   Future<Either> signup(SignUpReqParams signUpReqParams);
   Future<bool> isLoggedIn(); // Know if the user is authenticated
+  Future<Either> getUser();
 }

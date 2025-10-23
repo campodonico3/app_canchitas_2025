@@ -1,4 +1,5 @@
 class ApiUrls {
   static const baseUrl = 'http://192.168.0.102:3000/';
   static const register = '${baseUrl}auth/register';
+  static const userProfile = '${baseUrl}users/profile';
 }

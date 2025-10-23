@@ -2,6 +2,7 @@ import 'package:app_canchitas_2025/data/repository/auth.dart';
 import 'package:app_canchitas_2025/data/source/auth_api_service.dart';
 import 'package:app_canchitas_2025/data/source/auth_local_service.dart';
 import 'package:app_canchitas_2025/domain/repository/auth.dart';
+import 'package:app_canchitas_2025/domain/usecases/get_user.dart';
 import 'package:app_canchitas_2025/domain/usecases/is_logged_in.dart';
 import 'package:app_canchitas_2025/domain/usecases/signup.dart';
 import 'package:get_it/get_it.dart';
@@ -23,4 +24,5 @@ void setupServiceLocator() {
   // UseCases
   sl.registerSingleton<SignUpUseCase>(SignUpUseCase());
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
+  sl.registerSingleton<GetUserUseCase>(GetUserUseCase());
 }

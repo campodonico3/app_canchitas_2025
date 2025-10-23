@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../domain/repository/auth.dart';
 import '../../service_locator.dart';
 import '../models/signup_req_params.dart';
+import '../models/user.dart';
 
 // IMPLEMENTACIÓN DEL CONTRATO
 class AuthRepositoryImpl implements AuthRepository {
@@ -28,7 +29,23 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<bool> isLoggedIn() async{
+  Future<bool> isLoggedIn() async {
     return await sl<AuthLocalService>().isLoggedIn();
+  }
+
+  @override
+  Future<Either> getUser() async {
+    Either result = await sl<AuthApiService>().getUser();
+    return result.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        Response response = data;
+        var userModel = UserModel.fromMap(response.data);
+        var userEntity = userModel.toEntity();
+        return Right(userEntity);
+      },
+    );
   }
 }
