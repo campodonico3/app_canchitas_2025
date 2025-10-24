@@ -1,3 +1,4 @@
+import 'package:app_canchitas_2025/common/bloc/auth/auth_state_cubit.dart';
 import 'package:app_canchitas_2025/common/bloc/button/button_state.dart';
 import 'package:app_canchitas_2025/common/bloc/button/button_state_cubit.dart';
 import 'package:app_canchitas_2025/common/widgets/button/basic_app_button.dart';
@@ -20,40 +21,30 @@ class HomePage extends StatelessWidget {
       body: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => UserDisplayCubit()..displayUser()),
-          BlocProvider(create: (context) => ButtonStateCubit()),
+          //BlocProvider(create: (context) => ButtonStateCubit()),
         ],
-        child: BlocListener<ButtonStateCubit, ButtonState>(
-          listener: (context, state) {
-            if (state is ButtonSuccessState) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => SignUpPage()),
-              );
-            }
-          },
-          child: Center(
-            child: BlocBuilder<UserDisplayCubit, UserDisplayState>(
-              builder: (context, state) {
-                if (state is UserLoading) {
-                  return CircularProgressIndicator();
-                }
-                if (state is UserLoaded) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _username(state.userEntity),
-                      SizedBox(height: 10),
-                      _email(state.userEntity),
-                      _logout(context),
-                    ],
-                  );
-                }
-                if (state is LoadUserFailure) {
-                  return Text(state.errorMessage);
-                }
-                return Container();
-              },
-            ),
+        child: Center(
+          child: BlocBuilder<UserDisplayCubit, UserDisplayState>(
+            builder: (context, state) {
+              if (state is UserLoading) {
+                return CircularProgressIndicator();
+              }
+              if (state is UserLoaded) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _username(state.userEntity),
+                    SizedBox(height: 10),
+                    _email(state.userEntity),
+                    _logoutButton(context),
+                  ],
+                );
+              }
+              if (state is LoadUserFailure) {
+                return Text(state.errorMessage);
+              }
+              return Container();
+            },
           ),
         ),
       ),
@@ -74,16 +65,35 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _logout(BuildContext context) {
+  // Widget _logout(BuildContext context) {
+  //   return Padding(
+  //     padding: EdgeInsets.all(32),
+  //     child: BasicAppButton(
+  //       title: 'Logout',
+  //       onPressed: () {
+  //         context.read<AuthStateCubit>().logout();
+  //       },
+  //     ),
+  //   );
+  // }
+
+  Widget _logoutButton(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(32),
-      child: BasicAppButton(
-        title: 'Logout',
+      padding: EdgeInsets.symmetric(horizontal: 32),
+      child: ElevatedButton.icon(
         onPressed: () {
-          context.read<ButtonStateCubit>().execute(
-            usecase: sl<LogoutUseCase>(),
-          );
+          context.read<AuthStateCubit>().logout();
         },
+        icon: Icon(Icons.logout),
+        label: Text('Cerrar Sesión'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+          minimumSize: Size(double.infinity, 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
       ),
     );
   }

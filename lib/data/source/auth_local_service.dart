@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthLocalService {
@@ -21,5 +22,6 @@ class AuthLocalServiceImpl extends AuthLocalService {
   Future logout() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.clear();
+    return const Right(true);
   }
 }

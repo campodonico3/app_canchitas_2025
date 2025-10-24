@@ -1,4 +1,5 @@
 import 'package:app_canchitas_2025/domain/usecases/is_logged_in.dart';
+import 'package:app_canchitas_2025/domain/usecases/logout.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../service_locator.dart';
@@ -14,6 +15,11 @@ class AuthStateCubit extends Cubit<AuthState> {
     } else {
       emit(UnauthenticatedState());
     }
+  }
+
+  void logout() async {
+    await sl<LogoutUseCase>().call();
+    emit(UnauthenticatedState());
   }
 
 }
