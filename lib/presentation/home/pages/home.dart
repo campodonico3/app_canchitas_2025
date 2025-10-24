@@ -1,9 +1,14 @@
+import 'package:app_canchitas_2025/common/bloc/button/button_state.dart';
+import 'package:app_canchitas_2025/common/bloc/button/button_state_cubit.dart';
 import 'package:app_canchitas_2025/common/widgets/button/basic_app_button.dart';
 import 'package:app_canchitas_2025/domain/entities/user.dart';
+import 'package:app_canchitas_2025/domain/usecases/logout.dart';
+import 'package:app_canchitas_2025/presentation/auth/pages/signup.dart';
 import 'package:app_canchitas_2025/presentation/home/bloc/user_display_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../service_locator.dart';
 import '../bloc/user_display_state.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,29 +17,43 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => UserDisplayCubit()..displayUser(),
-        child: Center(
-          child: BlocBuilder<UserDisplayCubit, UserDisplayState>(
-            builder: (context, state) {
-              if (state is UserLoading) {
-                return CircularProgressIndicator();
-              }
-              if (state is UserLoaded) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _username(state.userEntity),
-                    SizedBox(height: 10),
-                    _email(state.userEntity),
-                  ],
-                );
-              }
-              if (state is LoadUserFailure) {
-                return Text(state.errorMessage);
-              }
-              return Container();
-            },
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => UserDisplayCubit()..displayUser()),
+          BlocProvider(create: (context) => ButtonStateCubit()),
+        ],
+        child: BlocListener<ButtonStateCubit, ButtonState>(
+          listener: (context, state) {
+            if (state is ButtonSuccessState) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => SignUpPage()),
+              );
+            }
+          },
+          child: Center(
+            child: BlocBuilder<UserDisplayCubit, UserDisplayState>(
+              builder: (context, state) {
+                if (state is UserLoading) {
+                  return CircularProgressIndicator();
+                }
+                if (state is UserLoaded) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _username(state.userEntity),
+                      SizedBox(height: 10),
+                      _email(state.userEntity),
+                      _logout(context),
+                    ],
+                  );
+                }
+                if (state is LoadUserFailure) {
+                  return Text(state.errorMessage);
+                }
+                return Container();
+              },
+            ),
           ),
         ),
       ),
@@ -58,7 +77,14 @@ class HomePage extends StatelessWidget {
   Widget _logout(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(32),
-      child: BasicAppButton(title: 'Logout', onPressed: () {}),
+      child: BasicAppButton(
+        title: 'Logout',
+        onPressed: () {
+          context.read<ButtonStateCubit>().execute(
+            usecase: sl<LogoutUseCase>(),
+          );
+        },
+      ),
     );
   }
 }

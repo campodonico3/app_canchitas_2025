@@ -8,6 +8,7 @@ import 'package:app_canchitas_2025/domain/usecases/signup.dart';
 import 'package:get_it/get_it.dart';
 
 import 'core/network/dio_client.dart';
+import 'domain/usecases/logout.dart';
 
 final sl = GetIt.instance;
 
@@ -25,4 +26,5 @@ void setupServiceLocator() {
   sl.registerSingleton<SignUpUseCase>(SignUpUseCase());
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
   sl.registerSingleton<GetUserUseCase>(GetUserUseCase());
+  sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
 }

@@ -48,4 +48,9 @@ class AuthRepositoryImpl implements AuthRepository {
       },
     );
   }
+
+  @override
+  Future logout() async {
+    return await sl<AuthLocalService>().logout();
+  }
 }
