@@ -2,6 +2,7 @@ import 'package:app_canchitas_2025/core/constants/api_urls.dart';
 import 'package:app_canchitas_2025/core/network/dio_client.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../service_locator.dart';
@@ -16,13 +17,27 @@ abstract class AuthApiService {
 class AuthApiServiceImpl implements AuthApiService {
   @override
   Future<Either> signup(SignUpReqParams signUpReqParams) async {
+    debugPrint('🟣 [API SERVICE] signup llamado');
+    debugPrint('🟣 [API SERVICE] Params: ${signUpReqParams.toMap()}');
+
     try {
       var response = await sl<DioClient>().post(
         ApiUrls.register,
         data: signUpReqParams.toMap(),
       );
+
+      debugPrint('🟣 ✅ [API SERVICE] Response recibida');
+      debugPrint('🟣 ✅ [API SERVICE] Response type: ${response.runtimeType}');
+      debugPrint('🟣 ✅ [API SERVICE] Status code: ${response.statusCode}');
+      debugPrint('🟣 ✅ [API SERVICE] Response data: ${response.data}');
+
       return Right(response);
+      
     } on DioException catch (e) {
+      
+      debugPrint('🟣 ❌ [API SERVICE] DioException');
+      debugPrint('🟣 ❌ [API SERVICE] Error: ${e.response?.data}');
+
       return Left(e.response!.data['message']);
     }
   }
@@ -30,20 +45,16 @@ class AuthApiServiceImpl implements AuthApiService {
   @override
   Future<Either> getUser() async {
     try {
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
       var token = sharedPreferences.getString('token');
       var response = await sl<DioClient>().get(
         ApiUrls.userProfile,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token'
-          }
-        ),
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
       return Right(response);
     } on DioException catch (e) {
       return Left(e.response!.data['message']);
     }
   }
-
 }

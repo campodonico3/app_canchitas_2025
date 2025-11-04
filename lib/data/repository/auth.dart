@@ -1,7 +1,10 @@
 import 'package:app_canchitas_2025/data/source/auth_api_service.dart';
 import 'package:app_canchitas_2025/data/source/auth_local_service.dart';
+import 'package:app_canchitas_2025/domain/entities/signin_params.dart';
+import 'package:app_canchitas_2025/domain/entities/signup_params.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/repository/auth.dart';
@@ -12,18 +15,49 @@ import '../models/user.dart';
 // IMPLEMENTACIÓN DEL CONTRATO
 class AuthRepositoryImpl implements AuthRepository {
   @override
-  Future<Either> signup(SignUpReqParams signUpReqParams) async {
+  Future<Either> signup(SignupParams params) async {
+    debugPrint('🟢 [DATA REPOSITORY] signup llamado');
+    debugPrint('🟢 [DATA REPOSITORY] Params: ${params.toString()}');
+
+    // We convert de DOMAIN -> DATA
+    final signUpReqParams = SignUpReqParams(
+      email: params.email,
+      password: params.password,
+      username: params.username,
+    );
+
     Either result = await sl<AuthApiService>().signup(signUpReqParams);
+
+    debugPrint('🟢 [DATA REPOSITORY] Result recibido del API Service');
+    debugPrint('🟢 [DATA REPOSITORY] Result type: ${result.runtimeType}');
+
     return result.fold(
       (error) {
+        debugPrint('🟢 ❌ [DATA REPOSITORY] LEFT recibido');
+        debugPrint('🟢 ❌ [DATA REPOSITORY] Error: $error');
+        debugPrint('🟢 ❌ [DATA REPOSITORY] Error type: ${error.runtimeType}');
         return Left(error);
       },
       (data) async {
-        Response response = data;
-        SharedPreferences sharedPreferences =
-            await SharedPreferences.getInstance();
-        sharedPreferences.setString('token', response.data['token']);
-        return Right(response);
+        try {
+          Response response = data;
+
+          debugPrint('🟢 ✅ [DATA REPOSITORY] RIGHT recibido');
+          debugPrint('🟢 ✅ [DATA REPOSITORY] Data type: ${data.runtimeType}');
+          debugPrint('🟢 ✅ [DATA REPOSITORY] Data: $data');
+
+          SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          sharedPreferences.setString('token', response.data['token']);
+
+          debugPrint('🟢 ✅ [DATA REPOSITORY] Token guardado exitosamente');
+
+          return Right(response);
+        } catch (e) {
+          debugPrint('🟢 💥 [DATA REPOSITORY] Error en cast o guardado: $e');
+          debugPrint('🟢 💥 [DATA REPOSITORY] Error type: ${e.runtimeType}');
+          return Left('Error procesando respuesta: $e');
+        }
       },
     );
   }
@@ -52,5 +86,11 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future logout() async {
     return await sl<AuthLocalService>().logout();
+  }
+
+  @override
+  Future<Either> signin(SignInParams params) {
+    // TODO: implement signin
+    throw UnimplementedError();
   }
 }

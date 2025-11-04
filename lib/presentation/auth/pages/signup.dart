@@ -1,5 +1,6 @@
 import 'package:app_canchitas_2025/common/bloc/button/button_state_cubit.dart';
 import 'package:app_canchitas_2025/data/models/signup_req_params.dart';
+import 'package:app_canchitas_2025/domain/entities/signup_params.dart';
 import 'package:app_canchitas_2025/domain/usecases/signup.dart';
 import 'package:app_canchitas_2025/presentation/auth/pages/signin.dart';
 import 'package:app_canchitas_2025/presentation/home/pages/home.dart';
@@ -25,12 +26,15 @@ class SignUpPage extends StatelessWidget {
         create: (context) => ButtonStateCubit(),
         child: BlocListener<ButtonStateCubit, ButtonState>(
           listener: (context, state) {
+            // Si se crea correctamente el usuario, navegar a la pantalla de inicio
             if (state is ButtonSuccessState) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => HomePage()),
               );
             }
+
+            // Si hay un error al momento de crearse el usuario, mostrar un snackbar con el error
             if (state is ButtonFailureState) {
               var snackBar = SnackBar(content: Text(state.errorMessage));
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -102,7 +106,7 @@ class SignUpPage extends StatelessWidget {
           title: 'Create Account',
           onPressed: () {
             context.read<ButtonStateCubit>().execute(
-              params: SignUpReqParams(
+              params: SignupParams(
                 email: _emailController.text,
                 password: _passwordController.text,
                 username: _usernameController.text,

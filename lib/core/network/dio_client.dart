@@ -47,11 +47,6 @@ class DioClient {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-
-    debugPrint('🌐 [DIO CLIENT] POST request iniciado');
-    debugPrint('🔗 [DIO CLIENT] URL: $url');
-    debugPrint('📦 [DIO CLIENT] Data: $data\n');
-
     try {
       final Response response = await _dio.post(
         url,
@@ -60,10 +55,7 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-
-      debugPrint('⬅️  [DIO CLIENT] Respuesta recibida');
-      debugPrint('📊 [DIO CLIENT] Status: ${response.statusCode}\n');
-
+      debugPrint('POST Response Register: ${response.data}');
       return response;
     } catch (e) {
       rethrow;

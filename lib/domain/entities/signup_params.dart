@@ -1,9 +1,9 @@
-class SignUpRequest {
+class SignupParams {
   final String email;
   final String password;
   final String username;
 
-  SignUpRequest({
+  SignupParams({
     required this.email,
     required this.password,
     required this.username,
