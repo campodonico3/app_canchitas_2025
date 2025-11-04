@@ -1,5 +1,4 @@
 import 'package:app_canchitas_2025/common/bloc/button/button_state_cubit.dart';
-import 'package:app_canchitas_2025/data/models/signup_req_params.dart';
 import 'package:app_canchitas_2025/domain/entities/signup_params.dart';
 import 'package:app_canchitas_2025/domain/usecases/signup.dart';
 import 'package:app_canchitas_2025/presentation/auth/pages/signin.dart';

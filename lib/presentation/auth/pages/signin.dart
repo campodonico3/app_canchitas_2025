@@ -1,5 +1,10 @@
+import 'package:app_canchitas_2025/common/bloc/button/button_state.dart';
 import 'package:app_canchitas_2025/common/bloc/button/button_state_cubit.dart';
+import 'package:app_canchitas_2025/domain/entities/signin_params.dart';
+import 'package:app_canchitas_2025/domain/usecases/signin.dart';
 import 'package:app_canchitas_2025/presentation/auth/pages/signup.dart';
+import 'package:app_canchitas_2025/presentation/home/pages/home.dart';
+import 'package:app_canchitas_2025/service_locator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,22 +22,37 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create: (context) => ButtonStateCubit(),
-        child: SafeArea(
-          minimum: EdgeInsets.only(top: 100, right: 16, left: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _signIn(),
-              SizedBox(height: 50),
-              _emailField(),
-              SizedBox(height: 20),
-              _passwordField(),
-              SizedBox(height: 60),
-              _createAccountButton(context),
-              SizedBox(height: 20),
-              _signUpText(context),
-            ],
+        child: BlocListener<ButtonStateCubit, ButtonState>(
+          listener: (context, state) {
+            if (state is ButtonSuccessState) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            }
+
+            if(state is ButtonFailureState){
+              var snackBar = SnackBar(content: Text(state.errorMessage),);
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+          },
+          child: SafeArea(
+            minimum: EdgeInsets.only(top: 100, right: 16, left: 16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _signIn(),
+                SizedBox(height: 50),
+                _emailField(),
+                SizedBox(height: 20),
+                _passwordField(),
+                SizedBox(height: 60),
+                _createAccountButton(),
+                SizedBox(height: 20),
+                _signUpText(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -64,8 +84,11 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  Widget _createAccountButton(BuildContext context) {
-    return BasicAppButton(title: 'Login', onPressed: () {});
+  Widget _createAccountButton() {
+    return _LoginButton(
+      emailController: _emailController,
+      passwordController: _passwordController,
+    );
   }
 
   Widget _signUpText(BuildContext context) {
@@ -95,6 +118,32 @@ class SignInPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _LoginButton extends StatelessWidget {
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+
+  const _LoginButton({
+    required this.emailController,
+    required this.passwordController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BasicAppButton(
+      title: 'Login',
+      onPressed: () {
+        context.read<ButtonStateCubit>().execute(
+          params: SignInParams(
+            email: emailController.text,
+            password: passwordController.text,
+          ),
+          usecase: sl<SignInUseCase>(),
+        );
+      },
     );
   }
 }
