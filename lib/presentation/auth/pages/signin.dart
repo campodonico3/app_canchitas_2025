@@ -1,6 +1,8 @@
+import 'package:app_canchitas_2025/common/bloc/button/button_state_cubit.dart';
 import 'package:app_canchitas_2025/presentation/auth/pages/signup.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/widgets/button/basic_app_button.dart';
 
@@ -13,22 +15,25 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        minimum: EdgeInsets.only(top: 100,right: 16,left: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _signIn(),
-            SizedBox(height: 50),
-            _emailField(),
-            SizedBox(height: 20),
-            _passwordField(),
-            SizedBox(height: 60),
-            _createAccountButton(context),
-            SizedBox(height: 20,),
-            _signUpText(context),
-          ],
+      body: BlocProvider(
+        create: (context) => ButtonStateCubit(),
+        child: SafeArea(
+          minimum: EdgeInsets.only(top: 100, right: 16, left: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _signIn(),
+              SizedBox(height: 50),
+              _emailField(),
+              SizedBox(height: 20),
+              _passwordField(),
+              SizedBox(height: 60),
+              _createAccountButton(context),
+              SizedBox(height: 20),
+              _signUpText(context),
+            ],
+          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:app_canchitas_2025/data/models/signin_req_params.dart';
 import 'package:app_canchitas_2025/data/source/auth_api_service.dart';
 import 'package:app_canchitas_2025/data/source/auth_local_service.dart';
 import 'package:app_canchitas_2025/domain/entities/signin_params.dart';
@@ -89,8 +90,60 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either> signin(SignInParams params) {
-    // TODO: implement signin
-    throw UnimplementedError();
+  Future<Either> signin(SignInParams params) async {
+    debugPrint('🟢 [DATA REPOSITORY SIGNIN] signin llamado');
+    debugPrint('🟢 [DATA REPOSITORY SIGNIN] Params: ${params.toString()}');
+
+    final signInReqParams = SignInReqParams(
+      email: params.email,
+      password: params.password,
+    );
+
+    Either result = await sl<AuthApiService>().signin(signInReqParams);
+
+    debugPrint('🟢 [DATA REPOSITORY SIGNIN] Result recibido del API Service');
+    debugPrint(
+      '🟢 [DATA REPOSITORY SIGNIN] Result type: ${result.runtimeType}',
+    );
+
+    return result.fold(
+      (error) {
+        debugPrint('🟢 ❌ [DATA REPOSITORY SIGNIN] LEFT recibido');
+        debugPrint('🟢 ❌ [DATA REPOSITORY SIGNIN] Error: $error');
+        debugPrint(
+          '🟢 ❌ [DATA REPOSITORY SIGNIN] Error type: ${error.runtimeType}',
+        );
+        return Left(error);
+      },
+      (data) async {
+        try {
+          Response response = data;
+
+          debugPrint('🟢 ✅ [DATA REPOSITORY SIGNIN] RIGHT recibido');
+          debugPrint(
+            '🟢 ✅ [DATA REPOSITORY SIGNIN] Data type: ${data.runtimeType}',
+          );
+          debugPrint('🟢 ✅ [DATA REPOSITORY SIGNIN] Data: $data');
+
+          SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          sharedPreferences.setString('token', response.data['token']);
+
+          debugPrint(
+            '🟢 ✅ [DATA REPOSITORY SIGNIN] Token guardado exitosamente',
+          );
+
+          return Right(response);
+        } catch (e) {
+          debugPrint(
+            '🟢 💥 [DATA REPOSITORY SIGNIN] Error en cast o guardado: $e',
+          );
+          debugPrint(
+            '🟢 💥 [DATA REPOSITORY SIGNIN] Error type: ${e.runtimeType}',
+          );
+          return Left('Error procesando respuesta: $e');
+        }
+      },
+    );
   }
 }
