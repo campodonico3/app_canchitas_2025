@@ -1,12 +1,12 @@
 import 'package:app_canchitas_2025/core/constants/api_urls.dart';
 import 'package:app_canchitas_2025/core/network/dio_client.dart';
-import 'package:app_canchitas_2025/data/models/signin_req_params.dart';
+import 'package:app_canchitas_2025/features/auth/data/models/signin_req_params.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../service_locator.dart';
+import '../../../../service_locator.dart';
 import '../models/signup_req_params.dart';
 
 // COMUNICACIÓN API

@@ -1,5 +1,5 @@
-import 'package:app_canchitas_2025/domain/entities/signin_params.dart';
-import 'package:app_canchitas_2025/domain/entities/signup_params.dart';
+import 'package:app_canchitas_2025/features/auth/domain/entities/signin_params.dart';
+import 'package:app_canchitas_2025/features/auth/domain/entities/signup_params.dart';
 import 'package:dartz/dartz.dart';
 
 // 📋 CONTRATO -> Define QUÉ se puede hacer, no CÓMO

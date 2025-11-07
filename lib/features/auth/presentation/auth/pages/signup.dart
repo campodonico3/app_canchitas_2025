@@ -1,15 +1,15 @@
 import 'package:app_canchitas_2025/common/bloc/button/button_state_cubit.dart';
-import 'package:app_canchitas_2025/domain/entities/signup_params.dart';
-import 'package:app_canchitas_2025/domain/usecases/signup.dart';
-import 'package:app_canchitas_2025/presentation/auth/pages/signin.dart';
-import 'package:app_canchitas_2025/presentation/home/pages/home.dart';
+import 'package:app_canchitas_2025/features/auth/domain/entities/signup_params.dart';
+import 'package:app_canchitas_2025/features/auth/domain/usecases/signup.dart';
+import 'package:app_canchitas_2025/features/auth/presentation/auth/pages/signin.dart';
+import 'package:app_canchitas_2025/features/auth/presentation/home/pages/home.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/bloc/button/button_state.dart';
-import '../../../common/widgets/button/basic_app_button.dart';
-import '../../../service_locator.dart';
+import '../../../../../common/bloc/button/button_state.dart';
+import '../../../../../common/widgets/button/basic_app_button.dart';
+import '../../../../../service_locator.dart';
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();

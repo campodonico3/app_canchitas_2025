@@ -15,7 +15,7 @@ Ejemplo Básico:
 // domain/usecases/login.dart
 import 'package:dartz/dartz.dart';
 import '../entities/user.dart';
-import '../repositories/auth.dart';
+import '../../../../domain/repositories/auth.dart';
 
 class LoginUseCase {
   final AuthRepository repository;
@@ -50,7 +50,7 @@ Ejemplo con Lógica Compleja:
 // domain/usecases/signup.dart
 import 'package:dartz/dartz.dart';
 import '../entities/user.dart';
-import '../repositories/auth.dart';
+import '../../../../domain/repositories/auth.dart';
 
 class SignUpUseCase {
   final AuthRepository authRepository;
@@ -111,10 +111,10 @@ UseCase con Múltiples Repositorios:
 
 // domain/usecases/checkout.dart
 import 'package:dartz/dartz.dart';
-import '../entities/order.dart';
-import '../repositories/cart.dart';
-import '../repositories/payment.dart';
-import '../repositories/order.dart';
+import '../../../../domain/entities/order.dart';
+import '../../../../domain/repositories/cart.dart';
+import '../../../../domain/repositories/payment.dart';
+import '../../../../domain/repositories/order.dart';
 
 class CheckoutUseCase {
   final CartRepository cartRepository;

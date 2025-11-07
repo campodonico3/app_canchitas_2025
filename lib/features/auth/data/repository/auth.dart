@@ -1,15 +1,15 @@
-import 'package:app_canchitas_2025/data/models/signin_req_params.dart';
-import 'package:app_canchitas_2025/data/source/auth_api_service.dart';
-import 'package:app_canchitas_2025/data/source/auth_local_service.dart';
-import 'package:app_canchitas_2025/domain/entities/signin_params.dart';
-import 'package:app_canchitas_2025/domain/entities/signup_params.dart';
+import 'package:app_canchitas_2025/features/auth/data/models/signin_req_params.dart';
+import 'package:app_canchitas_2025/features/auth/data/source/auth_api_service.dart';
+import 'package:app_canchitas_2025/features/auth/data/source/auth_local_service.dart';
+import 'package:app_canchitas_2025/features/auth/domain/entities/signin_params.dart';
+import 'package:app_canchitas_2025/features/auth/domain/entities/signup_params.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/repository/auth.dart';
-import '../../service_locator.dart';
+import '../../../../service_locator.dart';
 import '../models/signup_req_params.dart';
 import '../models/user.dart';
 

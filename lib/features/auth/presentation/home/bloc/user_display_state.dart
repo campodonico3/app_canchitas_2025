@@ -1,4 +1,4 @@
-import 'package:app_canchitas_2025/domain/entities/user.dart';
+import 'package:app_canchitas_2025/features/auth/domain/entities/user.dart';
 
 abstract class UserDisplayState {}
 

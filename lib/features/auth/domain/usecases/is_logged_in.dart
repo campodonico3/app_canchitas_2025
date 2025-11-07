@@ -1,7 +1,7 @@
-import 'package:app_canchitas_2025/domain/repository/auth.dart';
+import 'package:app_canchitas_2025/features/auth/domain/repository/auth.dart';
 
-import '../../core/usecase/usecase.dart';
-import '../../service_locator.dart';
+import '../../../../core/usecase/usecase.dart';
+import '../../../../service_locator.dart';
 
 class IsLoggedInUseCase implements UseCase<bool, dynamic> {
   @override
