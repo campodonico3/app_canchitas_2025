@@ -3,7 +3,7 @@ import 'package:app_canchitas_2025/common/bloc/button/button_state_cubit.dart';
 import 'package:app_canchitas_2025/features/auth/domain/entities/signin_params.dart';
 import 'package:app_canchitas_2025/features/auth/domain/usecases/signin.dart';
 import 'package:app_canchitas_2025/features/auth/presentation/auth/pages/signup.dart';
-import 'package:app_canchitas_2025/features/auth/presentation/home/pages/home.dart';
+import 'package:app_canchitas_2025/features/fields/presentation/home/pages/home.dart';
 import 'package:app_canchitas_2025/service_locator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +30,6 @@ class SignInPage extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const HomePage()),
               );
             }
-
             if(state is ButtonFailureState){
               var snackBar = SnackBar(content: Text(state.errorMessage),);
               ScaffoldMessenger.of(context).showSnackBar(snackBar);

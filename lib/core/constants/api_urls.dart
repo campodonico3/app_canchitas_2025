@@ -1,6 +1,6 @@
 class ApiUrls {
-  static const baseUrl = 'http://192.168.0.102:3000/';
+  static const baseUrl = 'http://192.168.0.102:3000/api/';
   static const register = '${baseUrl}auth/register';
-  static const userProfile = '${baseUrl}users/profile';
   static const login = '${baseUrl}auth/login';
+  static const userProfile = '${baseUrl}users/profile';
 }

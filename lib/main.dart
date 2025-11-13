@@ -1,7 +1,7 @@
 import 'package:app_canchitas_2025/common/bloc/auth/auth_state.dart';
 import 'package:app_canchitas_2025/common/bloc/auth/auth_state_cubit.dart';
 import 'package:app_canchitas_2025/features/auth/presentation/auth/pages/signup.dart';
-import 'package:app_canchitas_2025/features/auth/presentation/home/pages/home.dart';
+import 'package:app_canchitas_2025/features/fields/presentation/home/pages/home.dart';
 import 'package:app_canchitas_2025/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
