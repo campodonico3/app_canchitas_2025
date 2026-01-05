@@ -1,5 +1,5 @@
 import 'package:app_canchitas_2025/features/auth/domain/usecases/get_user.dart';
-import 'package:app_canchitas_2025/features/auth/presentation/home/bloc/user_display_state.dart';
+import 'package:app_canchitas_2025/features/auth/presentation/profile/bloc/user_display_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../service_locator.dart';

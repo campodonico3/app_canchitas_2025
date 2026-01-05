@@ -6,4 +6,4 @@ class UserEntity {
     required this.email,
     required this.username,
   });
-}
+} 
